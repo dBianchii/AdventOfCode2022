@@ -25,11 +25,16 @@ lines.forEach((line, i) =>{
   		const fromColumn = parseInt(words[3]) - 1;
   		const toColumn = parseInt(words[5]) - 1;
 
+		var CrateMover9001: String[] = [] // The unmuddening has made everything different. I present you, the crane array.
 		for (let j = 0; j < moveAmount; j++) {
-			var CrateMover9000 = stacks[fromColumn].shift()
-			if (CrateMover9000)
-				stacks[toColumn].unshift(CrateMover9000)
-			
+			let pickupOne = stacks[fromColumn].shift()
+			if (pickupOne)
+				CrateMover9001.push(pickupOne) 
+		}
+		CrateMover9001.reverse() // Its engines do a quickidy reflop that makes it reverse its order of the pickings.
+
+		for (const crate of CrateMover9001) {
+			stacks[toColumn].unshift(crate)
 		}
 	}
 	
