@@ -38,7 +38,6 @@ function CalculateScenicScore(
 	row: number,
 	col: number
 ): number {
-	//Calculate the score 4 trees above the tree
 	let currentTree = map[row][col]
 
 	//For every direction
