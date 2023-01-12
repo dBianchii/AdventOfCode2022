@@ -4,31 +4,20 @@ const input = readFileSync("./Day9/input.txt", "utf-8")
 
 let lines = input.split("\r\n")
 
-type Cell = {
-	visitedBy9: boolean
-	contains: Knot[]
-}
-
 class Knot {
 	constructor(
 		xPos: number,
 		yPos: number,
 		parent: Knot | null,
-		is9: boolean = false,
-		isH: boolean = false,
 		identifier: string,
 		child: Knot | null = null
 	) {
-		this.is9 = is9
 		this.xPos = xPos
 		this.yPos = yPos
 		this.parent = parent
 		this.child = child
-		this.isH = isH
 		this.identifier = identifier
 	}
-	isH: boolean = false
-	is9: boolean = false
 	identifier: string
 	parent: Knot | null
 	child: Knot | null
@@ -36,31 +25,30 @@ class Knot {
 	yPos: number
 }
 
+const H = new Knot(0, 0, null, "H")
+var contains: Knot[] = []
+contains.push(H)
+
+var lastKnot = H
+
+var numberOfKnots = 9 //Change this number to get more or less knots on your rope! 👌 (may not work for values bigger than 9)
+for (let i = 1; i <= numberOfKnots; i++) {
+	var newKnot = new Knot(0, 0, lastKnot, i.toString())
+	contains.push(newKnot)
+	lastKnot.child = newKnot
+	lastKnot = newKnot
+}
+
+type Cell = {
+	visitedBy9: boolean
+	contains: Knot[]
+}
 var map: Cell[][] = []
-const H = new Knot(0, 0, null, false, true, "H")
-const _1 = new Knot(0, 0, H, false, false, "1")
-const _2 = new Knot(0, 0, _1, false, false, "2")
-const _3 = new Knot(0, 0, _2, false, false, "3")
-const _4 = new Knot(0, 0, _3, false, false, "4")
-const _5 = new Knot(0, 0, _4, false, false, "5")
-const _6 = new Knot(0, 0, _5, false, false, "6")
-const _7 = new Knot(0, 0, _6, false, false, "7")
-const _8 = new Knot(0, 0, _7, false, false, "8")
-const _9 = new Knot(0, 0, _8, true, false, "9")
-H.child = _1
-_1.child = _2
-_2.child = _3
-_3.child = _4
-_4.child = _5
-_5.child = _6
-_6.child = _7
-_7.child = _8
-_8.child = _9
 
 map[0] = []
 map[0][0] = {
 	visitedBy9: true,
-	contains: [H, _1, _2, _3, _4, _5, _6, _7, _8, _9],
+	contains,
 }
 
 lines.forEach((line, i) => {
@@ -96,7 +84,7 @@ function MoveHead(direction: string, distance: number) {
 
 	function MoveAllKnots(knot: Knot) {
 		//Move head
-		if (knot.isH) {
+		if (knot.identifier == "H") {
 			//Move head
 			//Unset previous head position
 			map[knot.yPos][knot.xPos] = {
@@ -168,7 +156,8 @@ function MoveHead(direction: string, distance: number) {
 
 				//Set new child position
 				map[knot.yPos][knot.xPos] = {
-					visitedBy9: knot.is9 || map[knot.yPos][knot.xPos].visitedBy9,
+					visitedBy9:
+						knot.identifier == "9" || map[knot.yPos][knot.xPos].visitedBy9,
 					contains: map[knot.yPos][knot.xPos].contains.concat(knot),
 				}
 			}
