@@ -1,28 +1,4 @@
-class Monkey {
-	constructor(
-		id: number,
-		items: number[],
-		operation: string,
-		testDivisibleBy: number,
-		testTrueThrowMonkey: number,
-		testFalseThrowMonkey: number
-	) {
-		this.id = id
-		this.items = items
-		this.operation = operation
-		this.testDivisibleBy = testDivisibleBy
-		this.testTrueThrowMonkey = testTrueThrowMonkey
-		this.testFalseThrowMonkey = testFalseThrowMonkey
-		this.timesInspectedItems = 0
-	}
-	id: number
-	items: number[]
-	operation: string
-	testDivisibleBy: number
-	testTrueThrowMonkey: number
-	testFalseThrowMonkey: number
-	timesInspectedItems: number
-}
+import Monkey from "./monkeyClass"
 
 const Monkey0 = new Monkey(0, [72, 64, 51, 57, 93, 97, 68], "* 19", 17, 4, 7)
 const Monkey1 = new Monkey(1, [62], "* 11", 3, 3, 2)
@@ -56,14 +32,13 @@ function DoRound() {
 	for (let i = 0; i < monkeyArray.length; i++) {
 		const monkey = monkeyArray[i]
 		if (!monkey.items) continue
-		var itemLength = monkey.items.length
 
 		for (let item of monkey.items) {
 			var operatedItem = DoOperation(monkey, item)
 			//make monkey bored
 			//round down to nearest integer
 			var boredItem = Math.floor(operatedItem / 3)
-			var testResult = CheckIfBoredItemIsDivisibleByTest(monkey, boredItem)
+			var testResult = boredItem % monkey.testDivisibleBy == 0
 			if (testResult) {
 				monkeyArray[monkey.testTrueThrowMonkey].items.push(boredItem)
 			} else {
@@ -93,12 +68,4 @@ function DoOperation(monkey: Monkey, item: number) {
 			break
 	}
 	return item
-}
-
-function CheckIfBoredItemIsDivisibleByTest(monkey: Monkey, boredItem: number) {
-	if (boredItem % monkey.testDivisibleBy == 0) {
-		return true
-	} else {
-		return false
-	}
 }
