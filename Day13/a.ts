@@ -1,35 +1,38 @@
 import { readFileSync } from "fs";
 
 const input = readFileSync("./Day13/input.txt", "utf-8");
-
 let lines = input.split("\n");
 
+const pairs = lines
+  .map((line, i) => (i % 3 === 0 ? [line, lines[i + 1]] : null))
+  .filter(Boolean) as Array<[string, string]>;
+
+/* ------ MAIN ------ */
+
 let correctOrderIndexes = new Array<number>();
-let correctOrder = false
+let correctOrder = false;
 let finished = false;
-let currentLine = 1;
-lines.forEach((line, i) => {
-	if (i % 3 !== 0) return;
- 
-  const left = JSON.parse(line) as Array<number>;
-  const right = JSON.parse(lines[i + 1]) as Array<number>;
+pairs.forEach((pair, i) => {
+	const left = JSON.parse(pair[0]) as Array<number>;
+	const right = JSON.parse(pair[1]) as Array<number>;
 
 	correctOrder = false;
 	finished = false;
 
 	Compare(left, right)
 	if (correctOrder)
-		correctOrderIndexes.push(currentLine);
+		correctOrderIndexes.push(i + 1);
 
 	correctOrder = false;
 	finished = false;
-	currentLine++;
 })
-//sum of all correct order indexes
+
 console.log(
 	correctOrderIndexes.reduce((acc, curr) => acc + curr, 0)
 );
 
+
+/* ------ FUNCTIONS ------ */
 function Compare(a: number | number[], b: number | number[]): void {
 	if (finished) return;
 
