@@ -22,9 +22,6 @@ pairs.forEach((pair, i) => {
 	Compare(left, right)
 	if (correctOrder)
 		correctOrderIndexes.push(i + 1);
-
-	correctOrder = false;
-	finished = false;
 })
 
 console.log(
